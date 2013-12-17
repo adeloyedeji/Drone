@@ -4,6 +4,8 @@
  */
 package database;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author OMOLARA A
@@ -99,7 +101,7 @@ public class AnalysisDatabase {
         return numRows;
     }
     
-    public static String[] getAdvice(String state) {
+    public static java.sql.ResultSet getAdvice(String query, String state) {
         String[] advice;
         advice = new String[getCount("suggestions")];
         String adviceColumn;
@@ -110,7 +112,16 @@ public class AnalysisDatabase {
         } else {
             adviceColumn = "high";
         }
-        
-        return advice;
+        //query = "SELECT " + adviceColumn + " FROM suggestions ORDER BY " + adviceColumn + " LIMIT 0, 100";
+        java.sql.Connection cnn = null;
+        java.sql.ResultSet rs = null;
+        try {
+            Class.forName(database.DatabaseHandler.DRIVER);
+            cnn = java.sql.DriverManager.getConnection(database.DatabaseHandler.DATABASE, database.DatabaseHandler.UR, database.DatabaseHandler.PR);
+            rs = cnn.createStatement().executeQuery(query);
+        }catch(ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
     }
 }

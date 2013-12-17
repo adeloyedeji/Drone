@@ -4,7 +4,6 @@
  */
 package drone;
 
-import java.io.IOException;
 
 /**
  *
@@ -14,20 +13,21 @@ public class Analysis extends javax.swing.JFrame {
 
     MyLocation.locationSetter obj = new MyLocation.locationSetter();
     javax.swing.JLabel[] labels = new javax.swing.JLabel[4];
+    javax.swing.JScrollPane scroller;
     javax.swing.JTextArea suggestionsArea;
     double c = 30.0, i = 20.0, a = 50.0;
     static double total = 0.00;
     static int option = 0;
-    public Analysis(int option) throws IOException {
+    public Analysis(int option) throws java.io.IOException, java.sql.SQLException {
         super("Network Performance Prediction System");
         //Driver.initiate();
-        this.option = option;
+        drone.Driver.setFrameView();
+        Analysis.option = option;
         if(option == 0) {
             previousData(this);
         } else {
             //setGraphics(this, option);
         }
-        drone.Driver.setFrameView();
         setVisible(true);
         setSize(500, 700);
         setAlwaysOnTop(true);
@@ -35,13 +35,12 @@ public class Analysis extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     }
     
-    public void previousData(javax.swing.JFrame frame) {
+    public void previousData(javax.swing.JFrame frame) throws java.sql.SQLException {
         java.awt.Container parentFrame = frame.getContentPane();
         parentFrame.setLayout(new java.awt.GridLayout(1, 1, 5, 5));
         
         javax.swing.JPanel contentPanel = new javax.swing.JPanel();
         contentPanel.setPreferredSize(Driver.size(this.getWidth(), this.getHeight()));
-        //contentPanel.setBackground(Driver.white);
         contentPanel.setLayout(new java.awt.GridLayout(5, 1, 5, 5));
         
         for(int i = 0; i < labels.length; i++) {
@@ -49,6 +48,7 @@ public class Analysis extends javax.swing.JFrame {
             Driver.setProperties(labels[i]);
         }
         suggestionsArea = new javax.swing.JTextArea();
+        scroller = new javax.swing.JScrollPane(suggestionsArea);
         
         labels[0].setText("Percentage damage on Confidentiality is: " + Driver.scale(c, labels[0]) + " AT: " + c +"%");
         labels[1].setText("Percentage damage on Integrity is: " + Driver.scale(i, labels[1]) + " AT: " + i +"%");
@@ -65,7 +65,7 @@ public class Analysis extends javax.swing.JFrame {
         parentFrame.add(contentPanel, new java.awt.GridBagConstraints());
     }
     
-    public void newData(javax.swing.JFrame frame, int option) {
+    public void newData(javax.swing.JFrame frame, int option) throws java.sql.SQLException {
         java.awt.Container parentFrame = frame.getContentPane();
         parentFrame.setLayout(new java.awt.GridLayout(1, 1, 5, 5));
         
@@ -75,6 +75,8 @@ public class Analysis extends javax.swing.JFrame {
         contentPanel.setLayout(new java.awt.GridLayout(5, 1, 5, 5));
         
         suggestionsArea = new javax.swing.JTextArea();
+        scroller = new javax.swing.JScrollPane(suggestionsArea);
+        //scroller.setVerticalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         for(int i = 0; i < labels.length; i++) {
             labels[i] = new javax.swing.JLabel();
@@ -99,20 +101,44 @@ public class Analysis extends javax.swing.JFrame {
         return Math.round(number * 100.0) / 100.0;
     }
     
-    public void giveSuggestions(javax.swing.JTextArea area, String performance) {
+    public void giveSuggestions(javax.swing.JTextArea area, String performance) throws java.sql.SQLException {
         area.setLineWrap(true);
         area.setEditable(false);
-        
+        String query = null;
+        java.sql.ResultSet rss = null;
+                
         if(performance.equalsIgnoreCase("POOR")) {
-            
+            query = "SELECT low FROM suggestions ORDER BY low LIMIT 0, 100";
+            rss = database.AnalysisDatabase.getAdvice(query, "POOR");
+            while(rss.next()) {
+                for(int i = 0; i < 1; i++) {
+                    area.append(rss.getString(i+1) + "\n");
+                    area.append("____________________________________________________________\n");
+                }
+            }
         } else if(performance.equalsIgnoreCase("AVERAGE")) {
-            
+            query = "SELECT low FROM suggestions ORDER BY low LIMIT 0, 100";
+            rss = database.AnalysisDatabase.getAdvice(query, "AVERAGE");
+            while(rss.next()) {
+                for(int i = 0; i < 1; i++) {
+                    area.append(rss.getString(i+1) + "\n");
+                    area.append("____________________________________________________________\n");
+                }
+            }
         } else {
-            
+            query = "SELECT low FROM suggestions ORDER BY low LIMIT 0, 100";
+            rss = database.AnalysisDatabase.getAdvice(query, "HIGH");
+            while(rss.next()) {
+                for(int i = 0; i < 1; i++) {
+                    area.append(rss.getString(i+1) + "\n");
+                    area.append("____________________________________________________________\n");
+                }
+            }
         }
+        rss.close();
     }
     
-    public static void main(String[] args) throws IOException {
-        new Analysis(0).setVisible(true);
+    public static void main(String[] args) throws java.io.IOException, java.sql.SQLException{
+        new Analysis(option).setVisible(true);
     }
 }
