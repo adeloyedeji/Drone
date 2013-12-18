@@ -4,7 +4,6 @@
  */
 package drone;
 
-import java.io.IOException;
 import views.View1;
 
 
@@ -23,12 +22,13 @@ public class Drone extends javax.swing.JFrame implements java.awt.event.ActionLi
     String[] texts = new String[] {"Expert's Name", "Designation", "Number of year(s) of experience", "Date", "Time"};
     MyLocation.locationSetter obj = new MyLocation.locationSetter();
     public static String name = "";
-    public Drone() throws IOException {
+    static int oopt;
+    
+    public Drone() throws java.io.IOException, java.sql.SQLException {
         super("Home");
         Driver.setFrameView();
         usePrevious(this);
         setVisible(true);
-        //setPreferredSize(new java.awt.Dimension(500, 500));
         setSize(400, 500);
         setLocation(obj.myWidth(this), obj.myHeight(this));
         setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
@@ -85,11 +85,11 @@ public class Drone extends javax.swing.JFrame implements java.awt.event.ActionLi
         if(database.DatabaseHandler.checkName(name).equalsIgnoreCase("")){
             if(Driver.isInteger(tot)) {
                 total = Integer.parseInt(tot);
-                setGraphics(this);
+                setGraphics(frame);
                 sql = "INSERT INTO totals VALUES('"+id+"', '"+total+"', '"+name+"')";
                 database.DatabaseHandler.insert(frame, sql);
             } else {
-                Errors.invalidInput(this);
+                Errors.invalidInput(frame);
             }
         } else {
             title = "Error";
@@ -100,15 +100,17 @@ public class Drone extends javax.swing.JFrame implements java.awt.event.ActionLi
     }
     
     
-    public void usePrevious(javax.swing.JFrame frame) throws IOException {
+    public void usePrevious(javax.swing.JFrame frame) throws java.io.IOException, java.sql.SQLException {
         int option = 0;
         String title = "Use previous data";
         String msg = "Would you like to use previous data";
         option = javax.swing.JOptionPane.showConfirmDialog(frame, msg, title, javax.swing.JOptionPane.YES_NO_OPTION);
         if(option == 0) {
+            oopt = option;
+            frame.dispose();
             new Analysis(option).setVisible(true);
         } else {
-            getExpertTotal(this);
+            getExpertTotal(frame);
         }
     }
        
@@ -139,7 +141,7 @@ public class Drone extends javax.swing.JFrame implements java.awt.event.ActionLi
         database.DatabaseHandler.insert(frame, sql);
     }
     
-    public static void main(String[] args) throws IOException {
-        new Drone().setVisible(true);
+    public static void main(String[] args) throws java.io.IOException, java.sql.SQLException {
+        new Drone().setVisible(true); 
     }
 }

@@ -4,8 +4,6 @@
  */
 package drone;
 
-import java.io.IOException;
-
 /**
  *
  * @author OMOLARA A
@@ -221,7 +219,7 @@ public class Driver {
     
     
     
-    public static void initiate() throws IOException {
+    public static void initiate() throws java.io.IOException, java.sql.SQLException {
         new probabilities.helpers.PriorHelper();
         System.out.println("Prior Class started.");
         new probabilities.PosteriorDistribution();

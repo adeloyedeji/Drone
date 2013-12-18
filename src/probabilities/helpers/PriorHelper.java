@@ -1,10 +1,10 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package probabilities.helpers;
 
-import java.io.IOException;
 
 /**
  *
@@ -24,7 +24,7 @@ public class PriorHelper {
     static double v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14;
     static String s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14;
     
-    public PriorHelper() throws IOException {
+    public PriorHelper() throws java.io.IOException, java.sql.SQLException {
         initiate();
         System.out.println("From PriorHelper, initiate started");
         new probabilities.PosteriorDistribution();
@@ -143,7 +143,7 @@ public class PriorHelper {
         return str.substring(0, 4);
     }
     
-    public static void saveCPTable(double[] values) throws IOException {
+    public static void saveCPTable(double[] values) throws java.io.IOException {
         java.sql.Connection cn = null;
         String sql = "INSERT INTO conditionals VALUES('"+name+"',"
                 + "'"+values[0]+"', '"+values[1]+"', '"+values[2]+"', '"+values[3]+"',"
@@ -172,7 +172,7 @@ public class PriorHelper {
         }
     }
     
-    public static void initiate() throws IOException {
+    public static void initiate() throws java.io.IOException {
         doTheMathYR();
         System.out.println();
         doTheMathCAUSE("identity_theft");

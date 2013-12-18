@@ -4,16 +4,11 @@
  */
 package views;
 
-import drone.Driver;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author OMOLARA A
  */
-public class Component12 {
+public class Component12  {
     
     static javax.swing.JLabel[] labels = new javax.swing.JLabel[28];
     static javax.swing.JRadioButton[] buttons = new javax.swing.JRadioButton[80];
@@ -24,36 +19,20 @@ public class Component12 {
     
     public static javax.swing.JComponent component12(final javax.swing.JTabbedPane pane, final javax.swing.JFrame frame) {
         javax.swing.JPanel contentPanel = new javax.swing.JPanel();
-        Driver.layoutFormat(contentPanel, 23, 2);
-        Driver.contentSize(contentPanel, 500, 700);
-        Driver.contentBorder(contentPanel, "PURPOSE: To know the likelihood of occurence and the impact or the consequences of the netvork security risks being on the three(3) network security objectives ");
+        drone.Driver.layoutFormat(contentPanel, 23, 2);
+        drone.Driver.contentSize(contentPanel, 500, 700);
+        drone.Driver.contentBorder(contentPanel, "PURPOSE: To know the likelihood of occurence and the impact or the consequences of the netvork security risks being on the three(3) network security objectives ");
         
         //define objects
         nextButton = new javax.swing.JButton("Next");
-        nextButton.addActionListener(new java.awt.event.ActionListener(){
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 String name = drone.Drone.name;
                 validation.Validate12.inspect12(buttons, frame, name, fields);
-                cTotal = database.DatabaseHandler.fetchTotal(frame, name);
-                if(cTotal <= 0) {
-                    drone.Errors.success(pane, "Data saved successfully");
-                    try {
-                        frame.dispose();
-                        new probabilities.helpers.PriorHelper();
-                        System.out.println("From Component12: Prior Class Started");
-                        new drone.Analysis(1).setVisible(true);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    frame.dispose();
-                    try {
-                        new probabilities.helpers.PriorHelper();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    drone.Driver.getSession(frame);
-                    database.DatabaseHandler.updateTotal(frame, name, (cTotal - 2));
+                try {
+                    new prior.PriorModule();
+                } catch(java.sql.SQLException se) {
+                    se.printStackTrace();
                 }
             }
         });

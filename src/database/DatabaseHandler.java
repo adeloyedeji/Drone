@@ -19,7 +19,6 @@ public class DatabaseHandler {
     
     public static void insert(javax.swing.JFrame frame, String sql) {
         java.sql.Connection connection = null;
-        //String sql = "INSERT INTO expertdata VALUES('"+id+"', '"+name+"', '"+designation+"', '"+numYears+"', '"+date+"', '"+time+"')";
         try {
             Class.forName(DRIVER);
             connection = java.sql.DriverManager.getConnection(DATABASE, UR, PR);
@@ -151,7 +150,7 @@ public class DatabaseHandler {
         String databaseName = "";
         java.sql.ResultSet rs = null;
         java.sql.Connection cnn = null;
-        String sql = "SELECT name FROM acptable WHERE name = '"+name+"'";
+        String sql = "SELECT name FROM totals WHERE name = '"+name+"'";
         try {
             Class.forName(DRIVER);
             cnn = java.sql.DriverManager.getConnection(DATABASE, UR, PR);

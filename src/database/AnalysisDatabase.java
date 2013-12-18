@@ -4,6 +4,7 @@
  */
 package database;
 
+
 /**
  *
  * @author OMOLARA A
@@ -99,18 +100,30 @@ public class AnalysisDatabase {
         return numRows;
     }
     
-    public static String[] getAdvice(String state) {
-        String[] advice;
-        advice = new String[getCount("suggestions")];
-        String adviceColumn;
-        if(state.equalsIgnoreCase("POOR")) {
-            adviceColumn = "low";
-        } else if(state.equalsIgnoreCase("AVERAGE")) {
-            adviceColumn = "medium";
-        } else {
-            adviceColumn = "high";
-        }
+    public static java.sql.ResultSet getAdvice(String query, String state) {
         
-        return advice;
+        java.sql.Connection cnn = null;
+        java.sql.ResultSet rs = null;
+        try {
+            Class.forName(database.DatabaseHandler.DRIVER);
+            cnn = java.sql.DriverManager.getConnection(database.DatabaseHandler.DATABASE, database.DatabaseHandler.UR, database.DatabaseHandler.PR);
+            rs = cnn.createStatement().executeQuery(query);
+        }catch(ClassNotFoundException | java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+    
+    public static java.sql.ResultSet fetchQuery(String query) {
+        java.sql.Connection cnn = null;
+        java.sql.ResultSet rs = null;
+        try {
+            Class.forName(database.DatabaseHandler.DRIVER);
+            cnn = java.sql.DriverManager.getConnection(database.DatabaseHandler.DATABASE, database.DatabaseHandler.UR, database.DatabaseHandler.PR);
+            rs = cnn.createStatement().executeQuery(query);
+        } catch(ClassNotFoundException | java.sql.SQLException se) {
+            se.printStackTrace();
+        }
+        return rs;
     }
 }

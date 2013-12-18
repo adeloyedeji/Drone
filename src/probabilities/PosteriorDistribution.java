@@ -4,7 +4,6 @@
  */
 package probabilities;
 
-import java.io.IOException;
 
 /**
  *
@@ -12,19 +11,20 @@ import java.io.IOException;
  */
 public class PosteriorDistribution {
     
-    public PosteriorDistribution() throws IOException {
+    public PosteriorDistribution() throws java.io.IOException, java.sql.SQLException {
         initiate();
         System.out.println("From PosteriorDistribution, initiate started");
     }
     
-    public void initiate() throws IOException {
+    public void initiate() throws java.io.IOException, java.sql.SQLException {
         //new probabilities.helpers.PosteriorHelper();
         new probabilities.helpers.PosteriorHelper().savePosteriorData("confidentiality");
         new probabilities.helpers.PosteriorHelper().savePosteriorData("integrity");
         new probabilities.helpers.PosteriorHelper().savePosteriorData("availability");
         new probabilities.JointProbabilities();
+        
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws java.io.IOException, java.sql.SQLException {
         new PosteriorDistribution();
     }
 }
