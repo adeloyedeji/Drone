@@ -4,9 +4,6 @@
  */
 package views;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author OMOLARA A
@@ -28,39 +25,14 @@ public class Component12  {
         
         //define objects
         nextButton = new javax.swing.JButton("Next");
-        nextButton.addActionListener(new java.awt.event.ActionListener(){
-            //@Override
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 String name = drone.Drone.name;
                 validation.Validate12.inspect12(buttons, frame, name, fields);
-                cTotal = database.DatabaseHandler.fetchTotal(frame, name);
-                if(cTotal <= 0) {
-                    drone.Errors.success(pane, "Data saved successfully");
-                    try {
-                        frame.dispose();
-                        try {
-                            new probabilities.helpers.PriorHelper();
-                        } catch (java.sql.SQLException ex) {
-                            Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        System.out.println("From Component12: Prior Class Started");
-                        //new drone.Analysis(1).setVisible(true);
-                    } catch (java.io.IOException ex) {
-                        Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    frame.dispose();
-                    try {
-                        try {
-                            new probabilities.helpers.PriorHelper();
-                        } catch (java.sql.SQLException ex) {
-                            Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } catch (java.io.IOException ex) {
-                        Logger.getLogger(Component12.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    drone.Driver.getSession(frame);
-                    database.DatabaseHandler.updateTotal(frame, name, (cTotal - 2));
+                try {
+                    new prior.PriorModule();
+                } catch(java.sql.SQLException se) {
+                    se.printStackTrace();
                 }
             }
         });
